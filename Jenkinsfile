@@ -1,16 +1,39 @@
+
 pipeline {
   agent any
+
   stages {
-    stage('Checkout') { steps { checkout scm } }
-    stage('Build Docker image') {
-      steps { bat 'docker build -t taskflow-manager:demo .' }
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
     }
-    stage('Verify image') {
-      steps { bat 'docker image inspect taskflow-manager:demo' }
+
+    stage('Install Dependencies') {
+      steps {
+        bat 'npm run install:all'
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        bat 'docker build -t taskflow-manager:demo .'
+      }
+    }
+
+    stage('Verify Docker Image') {
+      steps {
+        bat 'docker image inspect taskflow-manager:demo'
+      }
     }
   }
+
   post {
-    success { echo 'TaskFlow image built and verified successfully.' }
-    failure { echo 'Pipeline failed. Check the stage console output.' }
+    success {
+      echo 'TaskFlow dependencies installed and Docker image verified successfully.'
+    }
+    failure {
+      echo 'Pipeline failed. Check Console Output for the failing stage.'
+    }
   }
 }
