@@ -2,6 +2,10 @@
 pipeline {
   agent any
 
+  environment {
+    PATH = "C:\\Program Files\\nodejs;${env.PATH}"
+  }
+
   stages {
     stage('Checkout') {
       steps {
@@ -9,9 +13,18 @@ pipeline {
       }
     }
 
+    stage('Check Node and npm') {
+      steps {
+        bat 'where node'
+        bat 'where npm'
+        bat 'node --version'
+        bat 'npm --version'
+      }
+    }
+
     stage('Install Dependencies') {
       steps {
-        bat 'npm run install:all'
+        bat 'npm.cmd run install:all'
       }
     }
 
