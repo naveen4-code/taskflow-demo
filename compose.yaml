@@ -1,0 +1,14 @@
+services:
+  taskflow:
+    build: .
+    container_name: taskflow
+    ports:
+      - "8082:4000"
+    environment:
+      PORT: 4000
+      DATA_DIR: /app/data
+    volumes:
+      - taskflow-data:/app/data
+    restart: unless-stopped
+volumes:
+  taskflow-data:
